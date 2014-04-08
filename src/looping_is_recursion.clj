@@ -13,9 +13,15 @@
     (recur (rest a-seq))))
 
 (defn seq= [seq1 seq2]
-  (if (= (first seq1) (first seq2))
-    (recur (rest seq1) (rest seq2))
-     false))
+  (cond
+    (and (empty? seq1) (empty? seq2)) true
+    (or (empty? seq1) (empty? seq2)) false
+    :else (if (= (first seq1) (first seq2))
+            (recur (rest seq1) (rest seq2))
+            false)))
+
+(defn seq2= [seq1 seq2]
+  ())
 
 (defn find-first-index [pred a-seq]
    (loop [idx 0
@@ -26,14 +32,28 @@
       (recur (inc idx) (rest i-seq))))))
 
 (defn avg [a-seq]
-  -1)
+  (loop [sum 0
+         cnt 0
+         sq a-seq]
+    (if (empty? sq)
+        (/ sum cnt)
+        (recur (+ sum (first sq)) (inc cnt) (rest sq)))))
 
 (defn parity [a-seq]
-  ":(")
+     (set (map key (filter (fn [x] (odd? (val x))) (frequencies (sort a-seq))))))
 
 (defn fast-fibo [n]
-  ":(")
+  (loop [tc n
+         addition 1
+         res 0]
+    (if (zero? tc)
+      res
+      (recur (dec tc) res (+ res addition)))))
 
 (defn cut-at-repetition [a-seq]
-  [":("])
+  (loop [sq a-seq
+         res []]
+    (if (or (empty? sq) (contains? (set res) (first sq)))
+      res
+      (recur (rest sq) (conj res (first sq))))))
 
